@@ -10,7 +10,7 @@
 
 int main() {
 
-    const char *read_file = "read_first_100_lines.out";
+    const char *read_file = "../read_first_100_lines.out";
     FILE *read_single = fopen(read_file, "r");
     char *buffer;
     int *operation_id = 0, *address = 0, *call_id = 0, times = 0;
