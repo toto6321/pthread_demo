@@ -26,12 +26,12 @@ int main() {
     char *buffer_string;
 
     // pointer to the address where the dynamically allocated memory for our data starts
-    MyTuple *beginning;
+    MyTuple *beginning = NULL ;
 
     // numbers of our data reading from files
     unsigned long int number_of_read_single = 0;
 
-    int size_of_my_tuple = sizeof(MyTuple);
+    unsigned int size_of_my_tuple = sizeof(MyTuple);
 
     // read the file
     read_single = fopen(read_file, "r");
