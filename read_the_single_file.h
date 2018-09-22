@@ -11,12 +11,12 @@
 
 #endif //HOMEWORK1_TIANHUAN_TU_READ_FILE_H
 
-MyStruct * read_the_single_file(char *file_name, unsigned long int *number){
+MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     // save the frequently-used value to make performance better
     const unsigned int size_of_my_struct = sizeof(MyStruct);
 
     // pointer to the address where the dynamically allocated memory begins
-    MyStruct * beginning = nullptr;
+    MyStruct *beginning = nullptr;
 
     // file pointer
     FILE *input_scream;
@@ -43,9 +43,12 @@ MyStruct * read_the_single_file(char *file_name, unsigned long int *number){
         // extract data from the buffer_string
         sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id);
         times = 1;
-
+        if(number== nullptr){
+            printf("the number pointer is null pointer");
+            exit(2);
+        }
         // dynamically allocate memory to store our data
-        if (*number == 0) {
+        if (*number == 0 ) {
             // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
             beginning = (MyStruct *) calloc(*number + 1, size_of_my_struct);
         } else {
@@ -59,7 +62,7 @@ MyStruct * read_the_single_file(char *file_name, unsigned long int *number){
         // count + 1
         (*number)++;
 
-        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
+//        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
     }
 
     // do not forget to close the scream

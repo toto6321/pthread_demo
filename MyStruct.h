@@ -6,9 +6,9 @@
 #define HOMEWORK1_TIANHUAN_TU_MYSTRUCT_H
 
 
-typedef struct MyStruct{
+typedef struct{
     int address;
     int id;
     int times;
-};
+} MyStruct;
 #endif //HOMEWORK1_TIANHUAN_TU_MYSTRUCT_H
