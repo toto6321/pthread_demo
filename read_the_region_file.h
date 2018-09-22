@@ -57,3 +57,56 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
     fclose(input_stream);
     return beginning;
 }
+
+
+/**
+ *
+ * @param begin
+ * @param length
+ * @details sort the (function, id) set
+ */
+
+void sort_region(FunctionIdSet *begin, unsigned long int length) {
+    // sort out them by function name in alphabet order
+    bool select_sort(FunctionIdSet array[], unsigned long int length);
+
+    select_sort(begin, length);
+}
+
+bool select_sort(FunctionIdSet array[], unsigned long int length) {
+    bool swap_value(FunctionIdSet *left, FunctionIdSet *right);
+
+    for (int i = 0; i < length - 1; i++) {
+        for (unsigned long int j = length - 1; j > i; j--) {
+            if (strcmp(array[i].function_name, array[j].function_name) > 0) {
+                if(!swap_value(&array[i], &array[j])){
+                    exit(3);
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool swap_value(FunctionIdSet *left, FunctionIdSet *right) {
+    bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src);
+
+    FunctionIdSet middleman;
+    // assign right to the middleman first
+    function_id_set_assign(&middleman, right);
+
+    // assign left to right
+    function_id_set_assign(right, left);
+
+    // assign middleman(in essence, right value) to left
+    function_id_set_assign(left, &middleman);
+
+    return true;
+}
+
+bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
+    strcpy(des->function_name, src->function_name);
+    des->id = src->id;
+    return true;
+}
