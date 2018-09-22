@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 /*struct MyTuple {
     int address;
     int id;
@@ -10,18 +9,32 @@
 
 int main() {
 
+//    void extract_data(int *operation_id, int *timestamp, float *read_timestamp, int *call_id);
+
     const char *read_file = "../read_first_100_lines.out";
-    FILE *read_single = fopen(read_file, "r");
-    char *buffer;
-    int *operation_id = 0, *address = 0, *call_id = 0, times = 0;
+    FILE *read_single;
+    char buffer[50];
+    char row[4][25];
+    int *operation_id, *address, *call_id, *times;
     float *read_timestamp = 0;
+    char *cursor = "a";
+
+
+    // read the file
+    read_single = fopen(read_file, "r");
     if (read_single == NULL) {
         printf("Reading %s failed!", read_file);
         exit(2);
     }
-/*    while (EOF != fscanf(read_single, "%d %f %d %d", operation_id, read_timestamp, address, call_id)) {
-        printf("%d\t%f\t%d\t%d", *operation_id, *read_timestamp, *address, *call_id);
-    }*/
+
+//    char s[50];
+    for (int i = 0; i < 1 || cursor != NULL; i++) {
+        cursor = fgets(buffer, 50, read_single);
+        sscanf(buffer, "[\n]\n", buffer);
+        sscanf(buffer, "%s %s %s %s", row[0], row[1], row[2], row[3]);
+//        sprintf(s, "%d\t%f\t%x\t%d\n", row[0], row[1], row[2], row[3]);
+//        printf(s);
+    }
 
     fclose(read_single);
 
@@ -29,7 +42,6 @@ int main() {
     return 0;
 }
 
-/*
-void extract_data(int *operation_id, int *timestamp, float *read_timestamp, int *call_id) {
+void extract_data(char buffer[50]) {
 
-}*/
+}
