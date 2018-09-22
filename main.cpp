@@ -25,8 +25,8 @@ int main() {
     unsigned long int number_of_region = 0;
 
     // read and extract data from files
-//    beginning_read_single = read_the_single_file(read_single_file, &number_of_read_single);
-//    beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
+    beginning_read_single = read_the_single_file(read_single_file, &number_of_read_single);
+    beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
     beginning_region = read_the_region_file(region_file, &number_of_region);
 
     printf("reading lines: %ld\n", sizeof(beginning_read_single));
@@ -45,6 +45,12 @@ int main() {
         printf("0x%08x \t%d \t%d\n", (beginning_write_single + i)->address, (beginning_write_single + i)->id,
                (beginning_write_single + i)->times);
     }
+
+    printf("##### region file: \n");
+    for (int i = 0; i < number_of_region; i++) {
+        printf("%-25s %d\n", (beginning_region + i)->function_name, (beginning_region + i)->id);
+    }
+
 
     // do not forget to release the memory space to avoid memory leak!
     if (beginning_read_single != nullptr) {
