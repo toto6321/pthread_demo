@@ -1,6 +1,23 @@
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    char c[1000];
+    FILE *fptr;
+
+    if ((fptr = fopen("program.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        // Program exits if file pointer returns NULL.
+        exit(1);
+    }
+
+    // reads text until newline
+    fscanf(fptr,"%[^\n]", c);
+
+    printf("Data from the file:\n%s", c);
+    fclose(fptr);
+
     return 0;
 }
