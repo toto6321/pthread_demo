@@ -5,9 +5,12 @@
 #include "MyStruct.h"
 #include "read_the_single_file.h"
 
+
+
 int main() {
     // input files
-    const char *read_single_file = "../read_first_100_lines.out";
+
+     char read_single_file[] = "../read_first_100_lines.out";
 //    const char *write_single_file = "../write_first_100_lines.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
@@ -19,7 +22,8 @@ int main() {
     unsigned long int *number_of_read_single = &ZERO;
 //    unsigned long int *number_of_write_single = &ZERO;
 
-//    read_the_single_file(read_single_file, beginning_read_single, number_of_read_single);
+    // read and extract data from files
+    beginning_read_single = read_the_single_file(read_single_file, number_of_read_single);
 
     printf("Data below is reading from the memory\n");
     for (int i = 0; i < *number_of_read_single; i++) {

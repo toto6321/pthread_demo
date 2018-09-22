@@ -1,8 +1,8 @@
 //
 // Created by toto on 9/22/18.
 //
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 #include "MyStruct.h"
 
@@ -10,9 +10,13 @@
 #define HOMEWORK1_TIANHUAN_TU_READ_FILE_H
 
 #endif //HOMEWORK1_TIANHUAN_TU_READ_FILE_H
-void read_the_single_file(char *file_name, MyStruct *beginning, unsigned long int *number){
+
+MyStruct * read_the_single_file(char *file_name, unsigned long int *number){
     // save the frequently-used value to make performance better
     const unsigned int size_of_my_struct = sizeof(MyStruct);
+
+    // pointer to the address where the dynamically allocated memory begins
+    MyStruct * beginning = nullptr;
 
     // file pointer
     FILE *input_scream;
@@ -53,12 +57,13 @@ void read_the_single_file(char *file_name, MyStruct *beginning, unsigned long in
         (beginning + *number)->times = times;
 
         // count + 1
-        *number++;
+        (*number)++;
 
-//        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
+        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
     }
 
     // do not forget to close the scream
     fclose(input_scream);
+    return beginning;
 
 }
