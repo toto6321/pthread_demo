@@ -29,13 +29,8 @@ bool freeMemorySpace(T *p) {
  * @param ch
  * @return
  */
-bool string_to_char_array(const string &s, char ch[]) {
-    if (sizeof(ch) < (s.length() + 1)) {
-        printf("char array is too samll to store the string");
-        return false;
-    }
+void string_to_char_array(const string &s, char ch[]) {
     sprintf(ch, "%s", s.c_str());
-    return true;
 }
 
 int main() {
@@ -125,7 +120,7 @@ int main() {
 
     char addr_string[20];
     for (auto &k: count_result) {
-        sprintf(addr_string, "%s", k.first.c_str());
+        string_to_char_array(k.first, addr_string);
         printf("%-50s%d\n", addr_string, k.second);
     }
 
