@@ -1,7 +1,9 @@
 #include <cstdlib>
 #include <cstdio>
-#include <cstring>
 
+#include <string>
+#include <map>
+#include <set>
 /*
 // Standford cslib package
 #include "StanfordCPPLib/collections/hashmap.h"
@@ -13,6 +15,7 @@
 #include "read_the_single_file.h"
 #include "read_the_region_file.h"
 
+typedef set<int>::iterator const_iterator;
 using namespace std;
 
 template<class T>
@@ -70,9 +73,16 @@ int main() {
 */
 
 //    HashMap<string, HashSet<int>> *region_map;
+    map<string, set<int>> *region_map;
+    region_map = mergeRegion(beginning_region, number_of_region);
 
-//    region_map = mergeRegion(beginning_region, number_of_region);
-
+    map<string, set<int>>::iterator it = region_map->begin();
+    for (; it != region_map->end(); it++) {
+        std::cout << it->first;
+        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
+            cout << *j << "," << endl;
+        }
+    }
 //    cout << region_map->keys() << endl;
 
     // do not forget to release the memory space to avoid memory leak!
