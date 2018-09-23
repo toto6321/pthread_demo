@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include "MyStruct.h"
+#include "my_struct.h"
 
 #ifndef HOMEWORK1_TIANHUAN_TU_READ_FILE_H
 #define HOMEWORK1_TIANHUAN_TU_READ_FILE_H
@@ -46,23 +46,24 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
         if(number== nullptr){
             printf("the number pointer is null pointer");
             exit(2);
-        }
-        // dynamically allocate memory to store our data
-        if (*number == 0 ) {
-            // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
-            beginning = (MyStruct *) calloc(*number + 1, size_of_my_struct);
         } else {
-            // *number > 0 means there exist data and we need to resize the memory space by 1 to store current data
-            beginning = (MyStruct *) realloc(beginning, size_of_my_struct * (*number + 1));
-        }
-        (beginning + *number)->address = address;
-        (beginning + *number)->id = call_id;
-        (beginning + *number)->times = times;
+            // dynamically allocate memory to store our data
+            if (*number == 0) {
+                // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
+                beginning = (MyStruct *) calloc(*number + 1, size_of_my_struct);
+            } else {
+                // *number > 0 means there exist data and we need to resize the memory space by 1 to store current data
+                beginning = (MyStruct *) realloc(beginning, size_of_my_struct * (*number + 1));
+            }
+            (beginning + *number)->address = address;
+            (beginning + *number)->id = call_id;
+            (beginning + *number)->times = times;
 
-        // count + 1
-        (*number)++;
+            // count + 1
+            (*number)++;
 
 //        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
+        }
     }
 
     // do not forget to close the scream
