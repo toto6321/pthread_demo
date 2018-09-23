@@ -3,21 +3,14 @@
 //
 #include <cstdlib>
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 
-// string in c++
+// c++ libraries
 #include <string>
 #include <iostream>
 #include <map>
 #include <set>
 
-
-
-/*
-// standford cslib package
-#include "StanfordCPPLib/collections/hashmap.h"
-#include "StanfordCPPLib/collections/hashset.h"
- */
 
 // my package
 #include "my_struct.h"
@@ -41,7 +34,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
     char *buffer_string;
 
     int id = 0;
-    char type[10], function_name[25];
+    char type[10], function_name[50];
 
     input_stream = fopen(file_name, "r");
     if (input_stream == nullptr) {
@@ -67,7 +60,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
 
             (*number)++;
         }
-//        printf("%-50s %d\n", function_name, id);
+        printf("%-50s %d\n", function_name, id);
     }
 
     // do not forget to close the scream
@@ -136,7 +129,7 @@ bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
  *
  * @param beginning
  * @param length
- * @return a map all (function_name, id) pairs
+ * @return a map of (function_name, id) pairs
  */
 void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id_map *region_map) {
     map<string, set<int>>::iterator it;
@@ -167,4 +160,45 @@ void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id
     }
 }
 
+
+/**
+ *
+ * @param beginning
+ * @param length
+ * @return a map of all (id, name) pairs
+ */
+void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, string> *region_map) {
+    void string_to_char_array(const string &s, char ch[]);
+
+    map<int, string>::iterator it;
+    unsigned long int index = 0;
+
+    // variable to store properties of a FunctionIdSet instance
+    string name;
+    char n[50];
+    int id = 0;
+
+
+    while (index < length) {
+        name = (beginning + index)->function_name;
+        id = (beginning + index)->id;
+        it = region_map->find(id);
+        // at the very first time, the *region_map is empty and the region_end hasn't been initialized
+        if (region_map->end() == it) {
+            // this function has not been added into the map
+            // and we are going to add it
+            region_map->insert(pair<int, string>(id, name));
+        } else {
+            // the map has already had the function record
+            // it shouldn't happen!
+            string_to_char_array(name, n);
+            printf("%-20d%s already exists!\n", id, n);
+        }
+        index++;
+    }
+}
+
+void string_to_char_array(const string &s, char ch[]) {
+    sprintf(ch, "%s", s.c_str());
+}
 

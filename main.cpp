@@ -8,8 +8,8 @@
 
 // my package
 #include "include/toto/my_struct.h"
-#include "include/toto/read_the_single_file.h"
-#include "include/toto/read_the_region_file.h"
+#include "include/toto/read_the_single_file.cpp"
+#include "include/toto/read_the_region_file.cpp"
 
 // data type for storing count result during caculation
 typedef map<string, int> count_map;
@@ -29,9 +29,6 @@ bool freeMemorySpace(T *p) {
  * @param ch
  * @return
  */
-void string_to_char_array(const string &s, char ch[]) {
-    sprintf(ch, "%s", s.c_str());
-}
 
 int main() {
     string generate_key_of_count_map(int address, const string &name);
@@ -62,16 +59,13 @@ int main() {
     function_id_map region_map;
     mergeRegion(beginning_region, number_of_region, &region_map);
 
-/*
+    map<int, string> region_map2;
+    map_region(beginning_region, number_of_region, &region_map2);
 
-    for (auto &it : region_map) {
-        cout << it.first << "\t";
-        for (int j : it.second) {
-            cout << j << ",";
-        }
-        cout << endl;
+    for (auto &it : region_map2) {
+        cout << setw(15) << it.first << it.second << endl;
     }
-*/
+
 
 
     // do not forget to release the memory space to avoid memory leak!
