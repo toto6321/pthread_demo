@@ -25,7 +25,7 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     char buffer[50];
 
     // variables to pass data to tuple property
-    int operation_id, address, call_id, times;
+    int operation_id, address, call_id;
     float read_timestamp;
 
     // char pointer to the address where the returned buffer of fgets() starts to be stored.
@@ -42,7 +42,6 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     while (nullptr != (buffer_string = fgets(buffer, 50, input_scream))) {
         // extract data from the buffer_string
         sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id);
-        times = 1;
         if(number== nullptr){
             printf("the number pointer is null pointer");
             exit(2);
@@ -57,7 +56,6 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
             }
             (beginning + *number)->address = address;
             (beginning + *number)->id = call_id;
-            (beginning + *number)->times = times;
 
             // count + 1
             (*number)++;

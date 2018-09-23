@@ -9,7 +9,6 @@
 typedef struct{
     int address;
     int id;
-    int times;
 } MyStruct;
 
 // data type for storing region record
