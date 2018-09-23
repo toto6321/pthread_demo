@@ -25,7 +25,7 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     char buffer[50];
 
     // variables to pass data to tuple property
-    int operation_id, address, call_id;
+    int operation_id = -1, address = -1, call_id = -1;
     float read_timestamp;
 
     // char pointer to the address where the returned buffer of fgets() starts to be stored.
@@ -39,29 +39,36 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
         exit(2);
     }
 
+    if (number == nullptr) {
+        printf("the number pointer is null pointer");
+        exit(2);
+    }
+
     while (nullptr != (buffer_string = fgets(buffer, 50, input_scream))) {
         // extract data from the buffer_string
-        sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id);
-        if(number== nullptr){
-            printf("the number pointer is null pointer");
-            exit(2);
-        } else {
-            // dynamically allocate memory to store our data
-            if (*number == 0) {
-                // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
-                beginning = (MyStruct *) calloc(*number + 1, size_of_my_struct);
-            } else {
-                // *number > 0 means there exist data and we need to resize the memory space by 1 to store current data
-                beginning = (MyStruct *) realloc(beginning, size_of_my_struct * (*number + 1));
-            }
-            (beginning + *number)->address = address;
-            (beginning + *number)->id = call_id;
+        if (sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id) < 4) {
+            // there will be no exception even though sscanf cannot extract data as expected
+            // and in that case the variables will remain what they are.
+            // we have to deal with this special case
+            continue;
+        }
 
-            // count + 1
-            (*number)++;
+        // dynamically allocate memory to store our data
+        if (*number == 0) {
+            // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
+            beginning = (MyStruct *) calloc(*number + 1, size_of_my_struct);
+        } else {
+            // *number > 0 means there exist data and we need to resize the memory space by 1 to store current data
+            beginning = (MyStruct *) realloc(beginning, size_of_my_struct * (*number + 1));
+        }
+        (beginning + *number)->address = address;
+        (beginning + *number)->id = call_id;
+
+        // count + 1
+        (*number)++;
 
 //        printf("%d\t%.1f\t0x%08x\t%d\n", operation_id, read_timestamp, address, call_id);
-        }
+
     }
 
     // do not forget to close the scream
