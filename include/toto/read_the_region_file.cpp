@@ -14,12 +14,13 @@
 
 // my package
 #include "my_struct.h"
+#include "read_the_region_file.h"
 
 using namespace std;
 
 #ifndef HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
 #define HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
-typedef map<string, set<int>> function_id_map;
+
 #endif //HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
 
 FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) {

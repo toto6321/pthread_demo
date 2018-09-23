@@ -10,9 +10,8 @@
 #include "include/toto/my_struct.h"
 #include "include/toto/read_the_single_file.cpp"
 #include "include/toto/read_the_region_file.cpp"
+#include "include/toto/count.cpp"
 
-// data type for storing count result during caculation
-typedef map<string, int> count_map;
 
 using namespace std;
 
@@ -31,7 +30,6 @@ bool freeMemorySpace(T *p) {
  */
 
 int main() {
-    string generate_key_of_count_map(int address, const string &name);
 
     // input files
     // because I use CLion and the executable output directory is the cmake-build-debug.
@@ -62,11 +60,6 @@ int main() {
     map<int, string> region_map2;
     map_region(beginning_region, number_of_region, &region_map2);
 
-    for (auto &it : region_map2) {
-        cout << setw(15) << it.first << it.second << endl;
-    }
-
-
 
     // do not forget to release the memory space to avoid memory leak!
     // now the data from region.out in memory become useless
@@ -81,36 +74,36 @@ int main() {
 
     // to create an enormous Map to save result during the calculation
     count_map count_result;
-    count_map::iterator cursor;
-    // temp variables used during counting
-    int address, call_id;
-    string function_name;
+    count_map count_result2;
 
+    // count read operation
+    count1(&count_result,
+           &region_map,
+           beginning_read_single,
+           number_of_read_single
+    );
 
-    // for records from read_single file
-    for (int i = 0; i < number_of_read_single; i++) {
-        address = (beginning_read_single + i)->address;
-        call_id = (beginning_read_single + i)->id;
-        // first to find out the name of the function which called it
-        for (auto &k: region_map) {
-            if (k.second.find(call_id) != k.second.end()) {
-                // call_id = id
-                function_name = k.first;
-                break;
-            }
-        }
+    // count write operation
+    count1(&count_result,
+           &region_map,
+           beginning_write_single,
+           number_of_write_single
+    );
 
-        // secondly to make counter ++
-        string key = generate_key_of_count_map(address, function_name);
-        cursor = count_result.find(key);
-        if (cursor != count_result.end()) {
-            // if the key/value pair exists, increase it by 1
-            cursor->second++;
-        } else {
-            // if not exist, insert this new record
-            count_result.insert(pair<string, int>(key, 1));
-        }
-    }
+    // count2 again
+    // count read operation
+    count2(&count_result2,
+           &region_map2,
+           beginning_read_single,
+           number_of_read_single
+    );
+
+    // count write operation
+    count2(&count_result2,
+           &region_map2,
+           beginning_write_single,
+           number_of_write_single
+    );
 
     char addr_string[20];
     for (auto &k: count_result) {
@@ -124,11 +117,7 @@ int main() {
     return 0;
 }
 
-string generate_key_of_count_map(int address, const string &name) {
-    char key[60];
-    sprintf(key, "%08x_%s", address, name.c_str());
-    return (string) key;
-};
+
 
 
 
