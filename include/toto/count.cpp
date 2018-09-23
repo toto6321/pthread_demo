@@ -28,8 +28,14 @@ void count1(map<string, int> *count_result,
     string function_name;
     count_map::iterator cursor;
 
+    // const default string to evaluate if the function is found
+    const string d = "It cannot be coincident!";
+
     // for records from read_single file
     for (int i = 0; i < number; i++) {
+        // make it a default string so that we can know if the function matched to the id is found
+        function_name = d;
+
         address = (begin + i)->address;
         call_id = (begin + i)->id;
         // first to find out the name of the function which called it
@@ -39,6 +45,12 @@ void count1(map<string, int> *count_result,
                 function_name = k.first;
                 break;
             }
+        }
+
+        if (function_name == d) {
+            // generally speaking, it won't happen
+            printf("call id of 0x%08x doesn't exist in the region file!\n", call_id);
+            continue;
         }
 
         // secondly to make counter ++
@@ -77,7 +89,8 @@ void count2(map<string, int> *count_result,
         it = region_map2->find(call_id);
         if (it == region_map2->end()) {
             // generally speaking, it won't happen
-            printf("call id of 0x%08x doesn't exist in the region file!", call_id);
+            printf("call id of 0x%08x doesn't exist in the region file!\n", call_id);
+            continue;
         } else {
             // the function name is found
             function_name = it->second;
@@ -98,6 +111,6 @@ void count2(map<string, int> *count_result,
 
 string generate_key_of_count_map(int address, const string &name) {
     char key[60];
-    sprintf(key, "%08x,%s", address, name.c_str());
+    sprintf(key, "0x%08x,%s", address, name.c_str());
     return (string) key;
 }
