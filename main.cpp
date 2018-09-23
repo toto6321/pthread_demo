@@ -45,9 +45,20 @@ int main() {
     unsigned long int number_of_region = 0;
 
     // read and extract data from files
+    __time_t read_read_file_start = time(nullptr);
+    __time_t read_read_file_end = time(nullptr);
+    printf("%-50s%lds\n", "reading read_single file costs", read_read_file_end - read_read_file_start);
     beginning_read_single = read_the_single_file(read_single_file, &number_of_read_single);
+
+    __time_t read_write_file_start = time(nullptr);
     beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
+    __time_t read_write_file_end = time(nullptr);
+    printf("%-50s%lds\n", "reading read_single file costs", read_write_file_end - read_write_file_start);
+
+    __time_t read_region_file_start = time(nullptr);
     beginning_region = read_the_region_file(region_file, &number_of_region);
+    __time_t read_region_file_end = time(nullptr);
+    printf("%-50s%lds\n", "reading read_single file costs", read_region_file_end - read_region_file_start);
 
     function_id_map region_map;
     mergeRegion(beginning_region, number_of_region, &region_map);
@@ -87,14 +98,14 @@ int main() {
     );
 
     __time_t count1_end = time(nullptr);
-    printf("count1 costs %ld\n", count1_end - count1_begin);
+    printf("%-20s%lds\n", "count1 costs:", count1_end - count1_begin);
 
     // write count result into file
     const char result_file1[] = "result1.csv";
     save_result(result_file1, &count_result);
 
     __time_t count1_end2 = time(nullptr);
-    printf("save1 costs %ld\n", count1_end2 - count1_end);
+    printf("%-20s%lds\n", "save1 costs", count1_end2 - count1_end);
 
     // count2 again
     // count read operation
@@ -113,13 +124,13 @@ int main() {
     );
 
     __time_t count2_end = time(nullptr);
-    printf("count2 costs %ld\n", count2_end - count2_begin);
+    printf("%-20s%lds\n", "count2 costs", count2_end - count2_begin);
 
     const char result_file2[] = "result2.csv";
     save_result(result_file2, &count_result2);
 
     __time_t count2_end2 = time(nullptr);
-    printf("save2 costs %ld\n", count2_end2 - count2_end);
+    printf("%-20s%lds\n", "save2 costs", count2_end2 - count2_end);
 
     freeMemorySpace(beginning_read_single);
     freeMemorySpace(beginning_write_single);
