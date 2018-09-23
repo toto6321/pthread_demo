@@ -48,42 +48,17 @@ int main() {
 //    beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
     beginning_region = read_the_region_file(region_file, &number_of_region);
 
-/*
-    printf("##### read single file: \n");
-    for (int i = 0; i < number_of_read_single; i++) {
-        printf("0x%08x \t%d \t%d\n", (beginning_read_single + i)->address, (beginning_read_single + i)->id,
-               (beginning_read_single + i)->times);
-    }
-
-    printf("##### write single file: \n");
-    for (int i = 0; i < number_of_write_single; i++) {
-        printf("0x%08x \t%d \t%d\n", (beginning_write_single + i)->address, (beginning_write_single + i)->id,
-               (beginning_write_single + i)->times);
-    }
-*/
-
-/*
-// since we have hashmap, sorting become unnecessary
-//    sort_region(beginning_region, number_of_region);
-
-    printf("##### region file: \n");
-    for (int i = 0; i < number_of_region; i++) {
-        printf("%-25s %d\n", (beginning_region + i)->function_name, (beginning_region + i)->id);
-    }
-*/
-
-//    HashMap<string, HashSet<int>> *region_map;
     map<string, set<int>> *region_map;
     region_map = mergeRegion(beginning_region, number_of_region);
 
-    map<string, set<int>>::iterator it = region_map->begin();
-    for (; it != region_map->end(); it++) {
-        std::cout << it->first;
-        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
-            cout << *j << "," << endl;
-        }
-    }
-//    cout << region_map->keys() << endl;
+//    map<string, set<int>>::iterator it = region_map->begin();
+//    for (; it != region_map->end(); it++) {
+//        std::cout << it->first;
+//        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
+//            cout << *j << "," << endl;
+//        }
+//    }
+
 
     // do not forget to release the memory space to avoid memory leak!
     freeMemorySpace(beginning_read_single);

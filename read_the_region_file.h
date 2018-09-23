@@ -131,9 +131,6 @@ bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
     return true;
 }
 
-/*
-
-
 
 /**
  *
@@ -143,34 +140,33 @@ bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
  */
 map<string, set<int>> *mergeRegion(FunctionIdSet *beginning, unsigned long int length) {
 //    HashMap<string, HashSet<int>> map;
-    map<string, set<int>> *region_map;
+    map<string, set<int>> region_map;
     map<string, set<int>>::iterator it;
     unsigned long int index = 0;
 
     // variable to store properties of a FunctionIdSet instance
-    string name = "";
+    string name;
     int id = 0;
 
     while (index < length) {
         name = (beginning + index)->function_name;
         id = (beginning + index)->id;
-        it = region_map->find(name);
-        if (region_map->end() == it) {
+        it = region_map.find(name);
+        if (region_map.end() == it) {
             // this function has not been added into the map
             // and we are going to add it
 
-//            HashSet<int> id_set;
             set<int> id_set;
             id_set.insert(id);
-            region_map->insert(pair<string, set<int>>(name, id_set));
+            region_map.insert(pair<string, set<int>>(name, id_set));
         } else {
             // the map has already had the function record
             // and we are going to update its value/ add this id in to the id set
-            region_map->find(name)->second.insert(id);
+            region_map.find(name)->second.insert(id);
         }
         index++;
     }
-    return region_map;
+    return &region_map;
 }
 
 
