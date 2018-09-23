@@ -48,8 +48,8 @@ int main() {
 //    beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
     beginning_region = read_the_region_file(region_file, &number_of_region);
 
-    map<string, set<int>> *region_map;
-    region_map = mergeRegion(beginning_region, number_of_region);
+    function_id_map *region_map;
+    mergeRegion(beginning_region, number_of_region, region_map);
 
 //    map<string, set<int>>::iterator it = region_map->begin();
 //    for (; it != region_map->end(); it++) {
