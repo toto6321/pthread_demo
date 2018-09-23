@@ -48,16 +48,17 @@ int main() {
 //    beginning_write_single = read_the_single_file(write_single_file, &number_of_write_single);
     beginning_region = read_the_region_file(region_file, &number_of_region);
 
-    function_id_map *region_map;
-    mergeRegion(beginning_region, number_of_region, region_map);
+    function_id_map region_map;
+    mergeRegion(beginning_region, number_of_region, &region_map);
 
-//    map<string, set<int>>::iterator it = region_map->begin();
-//    for (; it != region_map->end(); it++) {
-//        std::cout << it->first;
-//        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
-//            cout << *j << "," << endl;
-//        }
-//    }
+    map<string, set<int>>::iterator it = region_map.begin();
+    for (; it != region_map.end(); it++) {
+        std::cout << it->first << "\t";
+        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
+            cout << *j << ",";
+        }
+        cout << endl;
+    }
 
 
     // do not forget to release the memory space to avoid memory leak!

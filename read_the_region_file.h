@@ -146,11 +146,12 @@ void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id
     string name;
     int id = 0;
 
+
     while (index < length) {
         name = (beginning + index)->function_name;
         id = (beginning + index)->id;
         it = region_map->find(name);
-        region_map->end();
+        // at the very first time, the *region_map is empty and the region_end hasn't been initialized
         if (region_map->end() == it) {
             // this function has not been added into the map
             // and we are going to add it
