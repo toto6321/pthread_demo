@@ -4,16 +4,11 @@
 #include <string>
 #include <map>
 #include <set>
-/*
-// Standford cslib package
-#include "StanfordCPPLib/collections/hashmap.h"
-#include "StanfordCPPLib/collections/hashset.h"
-*/
 
 // my package
-#include "my_struct.h"
-#include "read_the_single_file.h"
-#include "read_the_region_file.h"
+#include "include/toto/my_struct.h"
+#include "include/toto/read_the_single_file.h"
+#include "include/toto/read_the_region_file.h"
 
 typedef set<int>::iterator const_iterator;
 using namespace std;
