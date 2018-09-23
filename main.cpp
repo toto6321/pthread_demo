@@ -51,11 +51,10 @@ int main() {
     function_id_map region_map;
     mergeRegion(beginning_region, number_of_region, &region_map);
 
-    map<string, set<int>>::iterator it = region_map.begin();
-    for (; it != region_map.end(); it++) {
-        std::cout << it->first << "\t";
-        for (const_iterator j = it->second.begin(); j != it->second.end(); j++) {
-            cout << *j << ",";
+    for (auto &it : region_map) {
+        cout << it.first << "\t";
+        for (int j : it.second) {
+            cout << j << ",";
         }
         cout << endl;
     }
