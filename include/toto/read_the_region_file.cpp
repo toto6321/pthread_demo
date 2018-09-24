@@ -137,7 +137,7 @@ bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
  *
  * @param beginning
  * @param length
- * @return a map of (function_name, id) pairs
+ * @return a map of (function_name, set(id)) pairs
  */
 void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id_map *region_map) {
     map<string, set<int>>::iterator it;
@@ -200,7 +200,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
             // the map has already had the function record
             // it shouldn't happen!
             string_to_char_array(name, n);
-            printf("%+10d%-50s already exists!\n", id, n);
+            printf("%o10d,%-50s already exists!\n", id, n);
         }
         index++;
     }
