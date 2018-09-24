@@ -49,7 +49,7 @@ void count1(map<string, int> *count_result,
 
         if (function_name == d) {
             // generally speaking, it won't happen
-            printf("call id of %#x doesn't exist in the region file!\n", call_id);
+            printf("call id of %d doesn't exist in the region file!\n", call_id);
             continue;
         }
 
@@ -89,7 +89,7 @@ void count2(map<string, int> *count_result,
         it = region_map2->find(call_id);
         if (it == region_map2->end()) {
             // generally speaking, it won't happen
-            printf("call id of %#x doesn't exist in the region file!\n", call_id);
+            printf("call id of %d doesn't exist in the region file!\n", call_id);
             continue;
         } else {
             // the function name is found

@@ -29,10 +29,10 @@ int main() {
     // input files
     // because I use CLion and the executable output directory is the cmake-build-debug.
     // so the relative path should be ../XXX
-    char read_single_file[] = "../read_first_1000000_lines.out";
-    char write_single_file[] = "../write_first_1000000_lines.out";
+    char read_single_file[] = "../read_first_100_lines.out";
+    char write_single_file[] = "../write_first_100_lines.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
-    char region_file[] = "../region_first_1000000_lines.out";
+    char region_file[] = "../region_exception.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
     MyStruct *beginning_read_single = nullptr;
@@ -60,29 +60,29 @@ int main() {
     __time_t read_region_file_end = time(nullptr);
     printf("%-50s%lds\n", "reading region file costs", read_region_file_end - read_region_file_start);
 
+
+
+/*
+     For each variable/address, to count the total number of read operation and write operation from the same instance call.
+     Since the read record and write record has same structure, we could count in read record and write record sequentially first,
+     and then go to multi-thread calculation
+*/
+
+
+    __time_t start_to_generate_map_str_set_int = time(nullptr);
+
+    // to create a map<string, set<int>> used for counting
     function_id_map region_map;
     mergeRegion(beginning_region, number_of_region, &region_map);
 
-    map<int, string> region_map2;
-    map_region(beginning_region, number_of_region, &region_map2);
+    __time_t end_up_map_generation_str_set_int = time(nullptr);
+    printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
+           end_up_map_generation_str_set_int - start_to_generate_map_str_set_int);
 
-
-    // do not forget to release the memory space to avoid memory leak!
-    // now the data from region.out in memory become useless
-    freeMemorySpace(beginning_region);
-
-
-    // for each variable/address,
-    // to count the total number of read operation and write operation from the same instance call
-    // since the read record and write record has same structure.
-    // we could count in read record and write record sequentially first,
-    // and then go to multi-thread calculation
-
-    // to create an enormous Map to save result during the calculation
     count_map count_result;
-//    count_map count_result2;
 
     __time_t count1_begin = time(nullptr);
+
     // count read operation
     count1(&count_result,
            &region_map,
@@ -104,9 +104,52 @@ int main() {
     const char result_file1[] = "result1_origin.csv";
     save_result(result_file1, &count_result);
 
-    __time_t count1_end2 = time(nullptr);
-    printf("%-20s%lds\n", "save1 costs", count1_end2 - count1_end);
+    __time_t save1_end = time(nullptr);
+    printf("%-20s%lds\n", "save1 costs", save1_end - count1_end);
 
+
+    /* count2 again */
+
+    __time_t start_to_generate_region_map_int_str = time(nullptr);
+
+    // to create a map<int, string> used for counting
+    map<int, string> region_map2;
+    map_region(beginning_region, number_of_region, &region_map2);
+
+    __time_t end_up_generating_region_map_int_str = time(nullptr);
+    printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
+           end_up_generating_region_map_int_str - start_to_generate_region_map_int_str);
+
+    count_map count_result2;
+
+    __time_t count2_begin = time(nullptr);
+    // count read operation
+    count2(&count_result2,
+           &region_map2,
+           beginning_read_single,
+           number_of_read_single
+    );
+
+    // count write operation
+    count2(&count_result2,
+           &region_map2,
+           beginning_write_single,
+           number_of_write_single
+    );
+
+    __time_t count2_end = time(nullptr);
+    printf("%-20s%lds\n", "count2 costs", count2_end - count2_begin);
+
+    const char result_file2[] = "result2_origin.csv";
+    save_result(result_file2, &count_result2);
+
+    __time_t save2_end = time(nullptr);
+    printf("%-20s%lds\n", "save2 costs", save2_end - count2_end);
+
+
+
+    // do not forget to release the memory space to avoid memory leak!
+    freeMemorySpace(beginning_region);
     freeMemorySpace(beginning_read_single);
     freeMemorySpace(beginning_write_single);
     return 0;
