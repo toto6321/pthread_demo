@@ -13,14 +13,11 @@ using namespace std;
 #include "read_the_region_file.h"
 
 
-// data type for storing count result during caculation
-typedef map<string, int> count_map;
-
-
-void count(count_map *count_result,
-           map<int, string> *region_map2,
+void count(map<string, int> *count_result,
+           map<int, string> *region_map,
            MyStruct *begin,
-           unsigned long int number
+           unsigned long int index_start,
+           unsigned long int index_end
 ) {
     string generate_key_of_count_map(int address, const string &name);
 
@@ -29,15 +26,15 @@ void count(count_map *count_result,
     // temp variables used during counting
     int address, call_id;
     string function_name;
-    count_map::iterator cursor;
+    map<string, int>::iterator cursor;
 
     // for records from read_single file
-    for (int i = 0; i < number; i++) {
+    for (int i = index_start; i <= index_end; i++) {
         address = (begin + i)->address;
         call_id = (begin + i)->id;
         // first to find out the name of the function which called it
-        it = region_map2->find(call_id);
-        if (it == region_map2->end()) {
+        it = region_map->find(call_id);
+        if (it == region_map->end()) {
             // generally speaking, it won't happen
             printf("call id of %d doesn't exist in the region file!\n", call_id);
             continue;
