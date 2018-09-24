@@ -79,98 +79,6 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
 
 /**
  *
- * @param begin
- * @param length
- * @details sort the (function, id) set
- */
-
-void sort_region(FunctionIdSet *begin, unsigned long int length) {
-    // sort out them by function name in alphabet order
-    bool select_sort(FunctionIdSet array[], unsigned long int length);
-
-    select_sort(begin, length);
-}
-
-// used in sort_region function
-bool select_sort(FunctionIdSet array[], unsigned long int length) {
-    bool swap_value(FunctionIdSet *left, FunctionIdSet *right);
-
-    for (int i = 0; i < length - 1; i++) {
-        for (unsigned long int j = length - 1; j > i; j--) {
-            if (strcmp(array[i].function_name, array[j].function_name) > 0) {
-                if (!swap_value(&array[i], &array[j])) {
-                    exit(3);
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-// used in select_sort function
-bool swap_value(FunctionIdSet *left, FunctionIdSet *right) {
-    bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src);
-
-    FunctionIdSet middleman;
-    // assign right to the middleman first
-    function_id_set_assign(&middleman, right);
-
-    // assign left to right
-    function_id_set_assign(right, left);
-
-    // assign middleman(in essence, right value) to left
-    function_id_set_assign(left, &middleman);
-
-    return true;
-}
-
-// used in swap_value function
-bool function_id_set_assign(FunctionIdSet *des, FunctionIdSet *src) {
-    strcpy(des->function_name, src->function_name);
-    des->id = src->id;
-    return true;
-}
-
-
-/**
- *
- * @param beginning
- * @param length
- * @return a map of (function_name, set(id)) pairs
- */
-void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id_map *region_map) {
-    map<string, set<int>>::iterator it;
-    unsigned long int index = 0;
-
-    // variable to store properties of a FunctionIdSet instance
-    string name;
-    int id = 0;
-
-
-    while (index < length) {
-        name = (beginning + index)->function_name;
-        id = (beginning + index)->id;
-        it = region_map->find(name);
-        // at the very first time, the *region_map is empty and the region_end hasn't been initialized
-        if (region_map->end() == it) {
-            // this function has not been added into the map
-            // and we are going to add it
-            set<int> id_set;
-            id_set.insert(id);
-            region_map->insert(pair<string, set<int>>(name, id_set));
-        } else {
-            // the map has already had the function record
-            // and we are going to update its value/ add this id in to the id set
-            region_map->find(name)->second.insert(id);
-        }
-        index++;
-    }
-}
-
-
-/**
- *
  * @param beginning
  * @param length
  * @return a map of all (id, name) pairs
@@ -216,3 +124,38 @@ void string_to_char_array(const string &s, char ch[]) {
     sprintf(ch, "%s", s.c_str());
 }
 
+
+/**
+ *
+ * @param beginning
+ * @param length
+ * @return a map of (function_name, set(id)) pairs
+ */
+void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id_map *region_map) {
+    map<string, set<int>>::iterator it;
+    unsigned long int index = 0;
+
+    // variable to store properties of a FunctionIdSet instance
+    string name;
+    int id = 0;
+
+
+    while (index < length) {
+        name = (beginning + index)->function_name;
+        id = (beginning + index)->id;
+        it = region_map->find(name);
+        // at the very first time, the *region_map is empty and the region_end hasn't been initialized
+        if (region_map->end() == it) {
+            // this function has not been added into the map
+            // and we are going to add it
+            set<int> id_set;
+            id_set.insert(id);
+            region_map->insert(pair<string, set<int>>(name, id_set));
+        } else {
+            // the map has already had the function record
+            // and we are going to update its value/ add this id in to the id set
+            region_map->find(name)->second.insert(id);
+        }
+        index++;
+    }
+}
