@@ -16,61 +16,11 @@ using namespace std;
 // data type for storing count result during caculation
 typedef map<string, int> count_map;
 
-void count1(map<string, int> *count_result,
-            map<string, set<int>> *region_map,
-            MyStruct *begin,
-            unsigned long int number
-) {
-    string generate_key_of_count_map(int address, const string &name);
 
-    // temp variables used during counting
-    int address, call_id;
-    string function_name;
-    count_map::iterator cursor;
-
-    // const default string to evaluate if the function is found
-    const string d = "It cannot be coincident!";
-
-    // for records from read_single file
-    for (int i = 0; i < number; i++) {
-        // make it a default string so that we can know if the function matched to the id is found
-        function_name = d;
-
-        address = (begin + i)->address;
-        call_id = (begin + i)->id;
-        // first to find out the name of the function which called it
-        for (auto &k: *region_map) {
-            if (k.second.find(call_id) != k.second.end()) {
-                // call_id = id
-                function_name = k.first;
-                break;
-            }
-        }
-
-        if (function_name == d) {
-            // generally speaking, it won't happen
-            printf("call id of %d doesn't exist in the region file!\n", call_id);
-            continue;
-        }
-
-        // secondly to make counter ++
-        string key = generate_key_of_count_map(address, function_name);
-        cursor = count_result->find(key);
-        if (cursor != count_result->end()) {
-            // if the key/value pair exists, increase it by 1
-            cursor->second++;
-        } else {
-            // if not exist, insert this new record
-            count_result->insert(pair<string, int>(key, 1));
-        }
-    }
-}
-
-
-void count2(map<string, int> *count_result,
-            map<int, string> *region_map2,
-            MyStruct *begin,
-            unsigned long int number
+void count(count_map *count_result,
+           map<int, string> *region_map2,
+           MyStruct *begin,
+           unsigned long int number
 ) {
     string generate_key_of_count_map(int address, const string &name);
 

@@ -68,55 +68,41 @@ int main() {
      and then go to multi-thread calculation
 */
 
-
-    __time_t start_to_generate_map_str_set_int = time(nullptr);
-
-    // to create a map<string, set<int>> used for counting
-    function_id_map region_map;
-    mergeRegion(beginning_region, number_of_region, &region_map);
-
-    __time_t end_up_map_generation_str_set_int = time(nullptr);
-    printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
-           end_up_map_generation_str_set_int - start_to_generate_map_str_set_int);
-
-
-    /* count2 has better performance and count1 was abandoned, just in case you have question about the label of "2" */
-
-    __time_t start_to_generate_region_map_int_str = time(nullptr);
+    __time_t start_to_generate_region_map = time(nullptr);
 
     // to create a map<int, string> used for counting
-    map<int, string> region_map2;
-    map_region(beginning_region, number_of_region, &region_map2);
+    map<int, string> region_map;
+    map_region(beginning_region, number_of_region, &region_map);
 
     __time_t end_up_generating_region_map_int_str = time(nullptr);
     printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
-           end_up_generating_region_map_int_str - start_to_generate_region_map_int_str);
+           end_up_generating_region_map_int_str - start_to_generate_region_map);
 
-    count_map count_result2;
+    count_map count_result;
 
-    __time_t count2_begin = time(nullptr);
+    __time_t count_begin = time(nullptr);
     // count read operation
-    count2(&count_result2,
-           &region_map2,
-           beginning_read_single,
-           number_of_read_single
+    count(&count_result,
+          &region_map,
+          beginning_read_single,
+          number_of_read_single
     );
 
     // count write operation
-    count2(&count_result2,
-           &region_map2,
-           beginning_write_single,
-           number_of_write_single
+    count(&count_result,
+          &region_map,
+          beginning_write_single,
+          number_of_write_single
     );
 
-    __time_t count2_end = time(nullptr);
-    printf("%-20s%lds\n", "count2 costs", count2_end - count2_begin);
+    __time_t count_end = time(nullptr);
+    printf("%-20s%lds\n", "counting costs", count_end - count_begin);
 
-    const char result_file2[] = "result2_origin.csv";
-    save_result(result_file2, &count_result2);
+    const char result_file[] = "result.csv";
+    save_result(result_file, &count_result);
 
-    __time_t save2_end = time(nullptr);
-    printf("%-20s%lds\n", "save2 costs", save2_end - count2_end);
+    __time_t save_end = time(nullptr);
+    printf("%-20s%lds\n", "saving costs", save_end - count_end);
 
 
 
