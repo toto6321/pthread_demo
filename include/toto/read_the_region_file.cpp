@@ -186,7 +186,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
     char n[50];
     int id = 0;
 
-
+    // loop to generate a (id->function_name) map
     while (index < length) {
         name = (beginning + index)->function_name;
         id = (beginning + index)->id;
@@ -197,10 +197,16 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
             // and we are going to add it
             region_map->insert(pair<int, string>(id, name));
         } else {
-            // the map has already had the function record
-            // it shouldn't happen!
+            // the map has already had a key/value pair in which the key is current id
+            // we need to compare the function name to which the id map with current function name
             string_to_char_array(name, n);
-            printf("%o10d,%-50s already exists!\n", id, n);
+            if (name == n) {
+                // it should never happen!
+                printf("%010d,%-50s already exists!\n", id, n);
+            } else {
+                // duplicate record, just skip and save time
+                continue;
+            }
         }
         index++;
     }
