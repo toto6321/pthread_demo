@@ -16,6 +16,7 @@
 
 using namespace std;
 
+
 template<class T>
 bool freeMemorySpace(T *p) {
     if (nullptr != p) {
@@ -115,7 +116,7 @@ int main() {
 
 
 bool save_result(const char output[], count_map *count_result) {
-    char addr_string[60];
+    char addr_string[FUNCTION_NAME_MAX_SIZE + 10 + 1];
     FILE *write_scream = fopen(output, "w");
 
     for (auto &k: *count_result) {

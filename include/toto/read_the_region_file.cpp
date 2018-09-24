@@ -16,6 +16,9 @@
 #include "my_struct.h"
 #include "read_the_region_file.h"
 
+const int FUNCTION_NAME_MAX_SIZE = 50;
+const int REGION_ROW_MAX_SIZE = 200;
+
 using namespace std;
 
 #ifndef HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
@@ -23,24 +26,25 @@ using namespace std;
 
 #endif //HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
 
+
 FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) {
     if (number == nullptr) {
         printf("the number pointer is null pointer");
         exit(2);
     }
 
-    const unsigned int size_of_function_id_set = sizeof(FunctionIdSet);
+    const unsigned int SIZE_OF_FUNCTION_ID_SET = sizeof(FunctionIdSet);
 
     FunctionIdSet *beginning = nullptr;
 
     FILE *input_stream = nullptr;
 
-    const int buffer_size = 200;
-    char buffer[buffer_size];
+    const int BUFFER_SIZE = REGION_ROW_MAX_SIZE;
+    char buffer[REGION_ROW_MAX_SIZE];
     char *buffer_string;
 
     int id = -1;
-    char type[10] = "", function_name[50] = "";
+    char type[10] = "", function_name[FUNCTION_NAME_MAX_SIZE] = "";
 
     input_stream = fopen(file_name, "r");
     if (input_stream == nullptr) {
@@ -48,7 +52,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
         exit(2);
     }
 
-    while (nullptr != (buffer_string = fgets(buffer, buffer_size, input_stream))) {
+    while (nullptr != (buffer_string = fgets(buffer, BUFFER_SIZE, input_stream))) {
         if (sscanf(buffer_string, "%d %s %s", &id, type, function_name) < 3) {
             // there will be no exception even though sscanf cannot extract data as expected
             // and in that case the variables will remain what they are.
@@ -58,10 +62,10 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
 
         if (*number == 0) {
             // number_of_read_singe = 0 means current data is the first, and we need to newly allocate memory space.
-            beginning = (FunctionIdSet *) calloc(*number + 1, size_of_function_id_set);
+            beginning = (FunctionIdSet *) calloc(*number + 1, SIZE_OF_FUNCTION_ID_SET);
         } else {
             // *number > 0 means there exist data and we need to resize the memory space by 1 to store current data
-            beginning = (FunctionIdSet *) realloc(beginning, size_of_function_id_set * (*number + 1));
+            beginning = (FunctionIdSet *) realloc(beginning, SIZE_OF_FUNCTION_ID_SET * (*number + 1));
         }
         strcpy((beginning + *number)->function_name, function_name);
         (beginning + *number)->id = id;
@@ -91,7 +95,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
 
     // variable to store properties of a FunctionIdSet instance
     string name;
-    char n[50];
+    char n[FUNCTION_NAME_MAX_SIZE];
     int id = 0;
 
     // loop to generate a (id->function_name) map
