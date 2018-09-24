@@ -29,10 +29,10 @@ int main() {
     // input files
     // because I use CLion and the executable output directory is the cmake-build-debug.
     // so the relative path should be ../XXX
-    char read_single_file[] = "../read_first_100_lines.out";
-    char write_single_file[] = "../write_first_100_lines.out";
+    char read_single_file[] = "../read_single.out";
+    char write_single_file[] = "../write_single.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
-    char region_file[] = "../region_first_100_lines.out";
+    char region_file[] = "../region.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
     MyStruct *beginning_read_single = nullptr;
@@ -101,7 +101,7 @@ int main() {
     printf("%-20s%lds\n", "count1 costs:", count1_end - count1_begin);
 
     // write count result into file
-    const char result_file1[] = "result1.csv";
+    const char result_file1[] = "result1_origin.csv";
     save_result(result_file1, &count_result);
 
     __time_t count1_end2 = time(nullptr);
@@ -126,7 +126,7 @@ int main() {
     __time_t count2_end = time(nullptr);
     printf("%-20s%lds\n", "count2 costs", count2_end - count2_begin);
 
-    const char result_file2[] = "result2.csv";
+    const char result_file2[] = "result2_origin.csv";
     save_result(result_file2, &count_result2);
 
     __time_t count2_end2 = time(nullptr);

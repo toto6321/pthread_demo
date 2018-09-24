@@ -35,7 +35,8 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
 
     FILE *input_stream = nullptr;
 
-    char buffer[200];
+    const int buffer_size = 200;
+    char buffer[buffer_size];
     char *buffer_string;
 
     int id = -1;
@@ -47,7 +48,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
         exit(2);
     }
 
-    while (nullptr != (buffer_string = fgets(buffer, 100, input_stream))) {
+    while (nullptr != (buffer_string = fgets(buffer, buffer_size, input_stream))) {
         if (sscanf(buffer_string, "%d %s %s", &id, type, function_name) < 3) {
             // there will be no exception even though sscanf cannot extract data as expected
             // and in that case the variables will remain what they are.
@@ -199,7 +200,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
             // the map has already had the function record
             // it shouldn't happen!
             string_to_char_array(name, n);
-            printf("%-20d%s already exists!\n", id, n);
+            printf("%+10d%-50s already exists!\n", id, n);
         }
         index++;
     }

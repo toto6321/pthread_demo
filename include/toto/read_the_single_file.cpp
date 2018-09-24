@@ -22,7 +22,8 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     FILE *input_scream;
 
     // char buffer to hold data within fgets()
-    char buffer[50];
+    const int buffer_size = 50;
+    char buffer[buffer_size];
 
     // variables to pass data to tuple property
     int operation_id = -1, address = -1, call_id = -1;
@@ -35,16 +36,17 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     // read the input_scream.out
     input_scream = fopen(file_name, "r");
     if (input_scream == nullptr) {
-        printf("Reading %s failed!", file_name);
+        printf("Reading %50s failed!", file_name);
         exit(2);
     }
 
     if (number == nullptr) {
-        printf("the number pointer is null pointer");
+        printf("The number pointer is a null pointer\n");
         exit(2);
     }
 
-    while (nullptr != (buffer_string = fgets(buffer, 50, input_scream))) {
+
+    while (nullptr != (buffer_string = fgets(buffer, buffer_size, input_scream))) {
         // extract data from the buffer_string
         if (sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id) < 4) {
             // there will be no exception even though sscanf cannot extract data as expected
