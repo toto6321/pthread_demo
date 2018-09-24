@@ -79,36 +79,8 @@ int main() {
     printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
            end_up_map_generation_str_set_int - start_to_generate_map_str_set_int);
 
-    count_map count_result;
 
-    __time_t count1_begin = time(nullptr);
-
-    // count read operation
-    count1(&count_result,
-           &region_map,
-           beginning_read_single,
-           number_of_read_single
-    );
-
-    // count write operation
-    count1(&count_result,
-           &region_map,
-           beginning_write_single,
-           number_of_write_single
-    );
-
-    __time_t count1_end = time(nullptr);
-    printf("%-20s%lds\n", "count1 costs:", count1_end - count1_begin);
-
-    // write count result into file
-    const char result_file1[] = "result1_origin.csv";
-    save_result(result_file1, &count_result);
-
-    __time_t save1_end = time(nullptr);
-    printf("%-20s%lds\n", "save1 costs", save1_end - count1_end);
-
-
-    /* count2 again */
+    /* count2 has better performance and count1 was abandoned, just in case you have question about the label of "2" */
 
     __time_t start_to_generate_region_map_int_str = time(nullptr);
 

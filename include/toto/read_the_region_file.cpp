@@ -125,8 +125,13 @@ void string_to_char_array(const string &s, char ch[]) {
 }
 
 
+
+/*
+ the following function is reserved just in case you want to know, how many id there are,for each function(name).
+ It is not useful to count any longer though.
+*/
+
 /**
- *
  * @param beginning
  * @param length
  * @return a map of (function_name, set(id)) pairs
