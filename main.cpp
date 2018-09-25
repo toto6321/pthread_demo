@@ -45,7 +45,7 @@ int main() {
     char read_single_file[] = "../read_single.out";
     char write_single_file[] = "../write_single.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
-    char region_file[] = "../region_first_228713_lines.out";
+    char region_file[] = "../region.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
     MyStruct *beginning_read_single = nullptr;
@@ -99,7 +99,7 @@ int main() {
 
     __time_t start_to_generate_region_map = time(nullptr);
 
-    // to create a map<int, string> used for counting
+    // to create a map<unsigned long int, string> used for counting
     map<unsigned long int, string> region_map;
     map_region(beginning_region, number_of_region, &region_map);
 
