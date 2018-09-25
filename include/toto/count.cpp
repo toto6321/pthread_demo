@@ -43,7 +43,7 @@ void count(map<string, int> *count_result,
             function_name = it->second;
         }
 
-        // secondly to make counter ++
+/*        // secondly to make counter ++
         string key = generate_key_of_count_map(address, function_name);
         cursor = count_result->find(key);
         if (cursor != count_result->end()) {
@@ -53,6 +53,7 @@ void count(map<string, int> *count_result,
             // if not exist, insert this new record
             count_result->insert(pair<string, int>(key, 1));
         }
+        */
     }
 }
 

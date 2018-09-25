@@ -68,7 +68,7 @@ int main() {
     char read_single_file[] = "../read_first_100_lines.out";
     char write_single_file[] = "../write_first_100_lines.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
-    char region_file[] = "../region_exception.out";
+    char region_file[] = "../region_first_100_lines.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
     MyStruct *beginning_read_single = nullptr;
@@ -125,7 +125,7 @@ int main() {
     map_region(beginning_region, number_of_region, &region_map);
 
     __time_t end_up_generating_region_map_int_str = time(nullptr);
-    printf("%-50s%lds\n", "generating region map<string, set<int>> costs",
+    printf("%-50s%lds\n", "generating region map<int, string> costs",
            end_up_generating_region_map_int_str - start_to_generate_region_map);
 
     map<string, int> count_result;
@@ -177,8 +177,8 @@ int main() {
 
         for (int i = 0; i < extra_number_of_threads; i++) {
             unsigned long int index_end = offset * i - 1;
-            if (index_end >= number_of_read_single) {
-                index_end = number_of_read_single - 1;
+            if (index_end >= number_of_write_single) {
+                index_end = number_of_write_single - 1;
             }
             MyStruct2 parameter_struct = {&count_result, &region_map, beginning_write_single, offset * i, index_end};
             thread_return_values2[i] = pthread_create(
