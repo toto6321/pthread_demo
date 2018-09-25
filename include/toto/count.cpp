@@ -55,6 +55,8 @@ void count(map<string, int> *count_result,
         // When you are searching in the map of count_result, you have to lock it because other threads might be updating it.
         pthread_rwlock_rdlock(rwlock);
         cursor = count_result->find(key);
+        pthread_rwlock_unlock(rwlock);
+
         // Definitely, it is not allowed to either read or write the map.
         pthread_rwlock_wrlock(rwlock);
         if (cursor != count_result->end()) {
