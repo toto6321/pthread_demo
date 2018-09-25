@@ -43,6 +43,7 @@ typedef struct {
     MyStruct *address_begin;
     unsigned long int index_begin;
     unsigned long int index_end;
+    pthread_mutex_t *mutex;
 } MyStruct2;
 
 
@@ -54,7 +55,8 @@ void *thread_function(void *p) {
             pointer->region_map,
             pointer->address_begin,
             pointer->index_begin,
-            pointer->index_end
+            pointer->index_end,
+            pointer->mutex
     );
     __time_t count_end = time(nullptr);
     printf("%-50s%lds\n", "multi-threads counting costs", count_end - count_begin);
@@ -65,10 +67,10 @@ int main() {
     // input files
     // because I use CLion and the executable output directory is the cmake-build-debug.
     // so the relative path should be ../XXX
-    char read_single_file[] = "../read_first_100_lines.out";
-    char write_single_file[] = "../write_first_100_lines.out";
+    char read_single_file[] = "../read_first_1000000_lines.out";
+    char write_single_file[] = "../write_first_1000000_lines.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
-    char region_file[] = "../region_first_100_lines.out";
+    char region_file[] = "../region_first_1000000_lines.out";
 
     // pointer to the address where the dynamically allocated memory for our data starts
     MyStruct *beginning_read_single = nullptr;
@@ -144,6 +146,9 @@ int main() {
 
         // create another (number_of_threads-1) threads
         pthread_t threads[extra_number_of_threads];
+        // create a pthread mutex to control actions of reading and writing on the result_map
+        pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
         // int array to save return value of extra threads
         int thread_return_values[extra_number_of_threads];
 
@@ -152,7 +157,14 @@ int main() {
             if (index_end >= number_of_read_single) {
                 index_end = number_of_read_single - 1;
             }
-            MyStruct2 parameter_struct = {&count_result, &region_map, beginning_read_single, offset * i, index_end};
+            MyStruct2 parameter_struct = {
+                    &count_result,
+                    &region_map,
+                    beginning_read_single,
+                    offset * i,
+                    index_end,
+                    &mutex1
+            };
             thread_return_values[i] = pthread_create(
                     threads + i,
                     nullptr,
@@ -172,6 +184,8 @@ int main() {
 
         // create another (number_of_threads-1) threads
         pthread_t threads2[extra_number_of_threads];
+        // recover mutex
+        mutex1 = PTHREAD_MUTEX_INITIALIZER;
         // int array to save return value of extra threads
         int thread_return_values2[extra_number_of_threads];
 
@@ -180,7 +194,14 @@ int main() {
             if (index_end >= number_of_write_single) {
                 index_end = number_of_write_single - 1;
             }
-            MyStruct2 parameter_struct = {&count_result, &region_map, beginning_write_single, offset * i, index_end};
+            MyStruct2 parameter_struct = {
+                    &count_result,
+                    &region_map,
+                    beginning_write_single,
+                    offset * i,
+                    index_end,
+                    &mutex1
+            };
             thread_return_values2[i] = pthread_create(
                     threads2 + i,
                     nullptr,
