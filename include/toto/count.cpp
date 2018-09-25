@@ -14,7 +14,7 @@ using namespace std;
 
 
 void count(map<string, int> *count_result,
-           map<int, string> *region_map,
+           map<unsigned long int, string> *region_map,
            MyStruct *begin,
            unsigned long int index_start,
            unsigned long int index_end,
@@ -22,7 +22,7 @@ void count(map<string, int> *count_result,
 ) {
     string generate_key_of_count_map(int address, const string &name);
 
-    map<int, string>::iterator it;
+    map<unsigned long int, string>::iterator it;
 
     // temp variables used during counting
     int address;
@@ -31,7 +31,7 @@ void count(map<string, int> *count_result,
     map<string, int>::iterator cursor;
 
     // for records from read_single file
-    for (int i = index_start; i <= index_end; i++) {
+    for (unsigned long int i = index_start; i <= index_end; i++) {
         address = (begin + i)->address;
         call_id = (begin + i)->id;
 

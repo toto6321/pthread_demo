@@ -39,7 +39,7 @@ bool save_result(const char output[], map<string, int> *count_result) {
 
 typedef struct {
     map<string, int> *count_result;
-    map<int, string> *region_map;
+    map<unsigned long int, string> *region_map;
     MyStruct *address_begin;
     unsigned long int index_begin;
     unsigned long int index_end;
@@ -49,7 +49,7 @@ typedef struct {
 
 void *thread_function(void *p) {
     __time_t count_begin = time(nullptr);
-    MyStruct2 *pointer = (MyStruct2 *) p;
+    auto *pointer = (MyStruct2 *) p;
     count(
             pointer->count_result,
             pointer->region_map,
@@ -85,8 +85,10 @@ int main() {
 
     // multi-thread numbers
     int number_of_threads = 0;
-    printf("How many threads do you allow:\t");
-    scanf("%d", &number_of_threads);
+    do {
+        printf("How many threads do you allow:\t");
+        scanf("%d", &number_of_threads);
+    } while (number_of_threads < 0);
 
 
     /* According to some experiments, it has better performance to read file(s) with single thread.
@@ -123,7 +125,7 @@ int main() {
     __time_t start_to_generate_region_map = time(nullptr);
 
     // to create a map<int, string> used for counting
-    map<int, string> region_map;
+    map<unsigned long int, string> region_map;
     map_region(beginning_region, number_of_region, &region_map);
 
     __time_t end_up_generating_region_map_int_str = time(nullptr);
@@ -216,10 +218,6 @@ int main() {
         }
 
 
-    } else if (number_of_threads > 0) {
-        // only main thread
-    } else {
-        printf("Please input a positive integer!\n");
     }
 
     __time_t count_end = time(nullptr);

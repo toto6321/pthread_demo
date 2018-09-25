@@ -87,10 +87,10 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
  * @param length
  * @return a map of all (id, name) pairs
  */
-void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, string> *region_map) {
+void map_region(FunctionIdSet *beginning, unsigned long int length, map<unsigned long int, string> *region_map) {
     void string_to_char_array(const string &s, char ch[]);
 
-    map<int, string>::iterator it;
+    map<unsigned long int, string>::iterator it;
     unsigned long int index = 0;
 
     // variable to store properties of a FunctionIdSet instance
@@ -107,7 +107,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
         if (region_map->end() == it) {
             // this function has not been added into the map
             // and we are going to add it
-            region_map->insert(pair<int, string>(id, name));
+            region_map->insert(pair<unsigned long int, string>(id, name));
         } else {
             // the map has already had a key/value pair in which the key is current id
             // we need to compare the function name to which the id map with current function name
