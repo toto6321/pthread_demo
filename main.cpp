@@ -25,18 +25,6 @@ bool freeMemorySpace(T *p) {
     }
 }
 
-bool save_result(const char output[], map<string, int> *count_result) {
-    char addr_string[FUNCTION_NAME_MAX_SIZE + 10 + 1];
-    FILE *write_scream = fopen(output, "w");
-
-    for (auto &k: *count_result) {
-        string_to_char_array(k.first, addr_string);
-        fprintf(write_scream, "%s,%d\n", addr_string, k.second);
-    }
-    fclose(write_scream);
-    return true;
-}
-
 typedef struct {
     map<string, int> *count_result;
     map<unsigned long int, string> *region_map;
@@ -47,28 +35,15 @@ typedef struct {
 } MyStruct2;
 
 
-void *thread_function(void *p) {
-    __time_t count_begin = time(nullptr);
-    auto *pointer = (MyStruct2 *) p;
-    count(
-            pointer->count_result,
-            pointer->region_map,
-            pointer->address_begin,
-            pointer->index_begin,
-            pointer->index_end,
-            pointer->mutex
-    );
-    __time_t count_end = time(nullptr);
-    printf("%-50s%lds\n", "multi-threads counting costs", count_end - count_begin);
-}
-
 int main() {
+    void *thread_function(void *p);
+    bool save_result(char *output, map<string, int> *count_result);
 
     // input files
     // because I use CLion and the executable output directory is the cmake-build-debug.
     // so the relative path should be ../XXX
-    char read_single_file[] = "../read_first_1000000_lines.out";
-    char write_single_file[] = "../write_first_1000000_lines.out";
+    char read_single_file[] = "../read_single.out";
+    char write_single_file[] = "../write_single.out";
     // the origin region.out has an unsupported first line. remove it with bash command "sed -i "1,1d" region.out"
     char region_file[] = "../region_first_228713_lines.out";
 
@@ -84,7 +59,7 @@ int main() {
 
 
     // multi-thread numbers
-    int number_of_threads = 0;
+    int number_of_threads = 2;
     do {
         printf("How many threads do you allow:\t");
         scanf("%d", &number_of_threads);
@@ -135,16 +110,23 @@ int main() {
     map<string, int> count_result;
 
 
-    /* multi-threads count*/
+    /* multi-threads counting*/
+    int extra_number_of_threads = number_of_threads - 1;
+    unsigned long int offset = 0;
+
+
+    // to debug
+    printf("%-50s%ld\n", "total read operations is ", number_of_read_single);
 
     if (number_of_threads > 1) {
         /* create threads */
-        int extra_number_of_threads = number_of_threads - 1;
-        unsigned long int offset = 0;
 
-        // for read_single data
-        offset = (unsigned long int) (int) ceil((number_of_read_single) / extra_number_of_threads);
         // to gain best performance, I am going to try to make it as even as possible
+        offset = (unsigned long int) (int) ceil((number_of_read_single) / extra_number_of_threads);
+
+        // to debug
+        printf("%-50s%ld\n", "offset for read operations count is ", offset);
+
 
         // create another (number_of_threads-1) threads
         pthread_t threads[extra_number_of_threads];
@@ -154,16 +136,19 @@ int main() {
         // int array to save return value of extra threads
         int thread_return_values[extra_number_of_threads];
 
+        MyStruct2 parameter_struct;
+
         for (int i = 0; i < extra_number_of_threads; i++) {
-            unsigned long int index_end = offset * i - 1;
+            unsigned long int index_begin = offset * i;
+            unsigned long int index_end = offset * (i + 1) - 1;
             if (index_end >= number_of_read_single) {
                 index_end = number_of_read_single - 1;
             }
-            MyStruct2 parameter_struct = {
+            parameter_struct = {
                     &count_result,
                     &region_map,
                     beginning_read_single,
-                    offset * i,
+                    index_begin,
                     index_end,
                     &mutex1
             };
@@ -180,9 +165,16 @@ int main() {
         }
 
 
-        // for read_single data
-        offset = (unsigned long int) (int) ceil((number_of_read_single) / extra_number_of_threads);
+        /* for write_single data */
+
+        // to debug
+        printf("%-50s%ld\n", "total write operations is ", number_of_write_single);
+
         // to gain best performance, I am going to try to make it as even as possible
+        offset = (unsigned long int) (int) ceil((number_of_write_single) / extra_number_of_threads);
+
+        // to debug
+        printf("%-50s%ld\n", "offset for read operations count is ", offset);
 
         // create another (number_of_threads-1) threads
         pthread_t threads2[extra_number_of_threads];
@@ -191,24 +183,27 @@ int main() {
         // int array to save return value of extra threads
         int thread_return_values2[extra_number_of_threads];
 
+        MyStruct2 parameter_struct2;
+
         for (int i = 0; i < extra_number_of_threads; i++) {
-            unsigned long int index_end = offset * i - 1;
-            if (index_end >= number_of_write_single) {
-                index_end = number_of_write_single - 1;
+            unsigned long int index_begin2 = offset * i;
+            unsigned long int index_end2 = offset * (i + 1) - 1;
+            if (index_end2 >= number_of_write_single) {
+                index_end2 = number_of_write_single - 1;
             }
-            MyStruct2 parameter_struct = {
+            parameter_struct2 = {
                     &count_result,
                     &region_map,
                     beginning_write_single,
-                    offset * i,
-                    index_end,
+                    index_begin2,
+                    index_end2,
                     &mutex1
             };
             thread_return_values2[i] = pthread_create(
                     threads2 + i,
                     nullptr,
                     thread_function,
-                    (void *) &parameter_struct
+                    (void *) &parameter_struct2
             );
         }
 
@@ -217,12 +212,12 @@ int main() {
             pthread_join(threads[j2], nullptr);
         }
 
-
     }
 
     __time_t count_end = time(nullptr);
 
-    const char result_file[] = "result.csv";
+    char result_file[50] = "result_default.csv";
+    sprintf(result_file, "%s_in_%d_threads.csv", "result", number_of_threads);
     save_result(result_file, &count_result);
 
     __time_t save_end = time(nullptr);
@@ -240,14 +235,32 @@ int main() {
 }
 
 
+void *thread_function(void *p) {
+    auto *pointer = (MyStruct2 *) p;
+    printf("%-50s%ld,%ld\n", "thread is going to count ", pointer->index_begin, pointer->index_end);
+    __time_t count_begin = time(nullptr);
+
+    count(
+            pointer->count_result,
+            pointer->region_map,
+            pointer->address_begin,
+            pointer->index_begin,
+            pointer->index_end,
+            pointer->mutex
+    );
+    __time_t count_end = time(nullptr);
+    printf("%-50s%lds\n", "multi-threads counting costs", count_end - count_begin);
+}
 
 
+bool save_result(char *output, map<string, int> *count_result) {
+    char addr_string[FUNCTION_NAME_MAX_SIZE + 10 + 1];
+    FILE *write_scream = fopen(output, "w");
 
-
-
-
-
-
-
-
-
+    for (auto &k: *count_result) {
+        string_to_char_array(k.first, addr_string);
+        fprintf(write_scream, "%s,%d\n", addr_string, k.second);
+    }
+    fclose(write_scream);
+    return true;
+}
