@@ -1,5 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <bits/stdc++.h>
 #include <ctime>
 #include <pthread.h>
@@ -129,7 +129,7 @@ int main() {
     map_region(beginning_region, number_of_region, &region_map);
 
     __time_t end_up_generating_region_map_int_str = time(nullptr);
-    printf("%-50s%ld\n", "generating region map costs",
+    printf("%-50s%lds\n", "generating region map costs",
            end_up_generating_region_map_int_str - start_to_generate_region_map);
 
     map<string, int> count_result;
