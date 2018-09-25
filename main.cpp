@@ -31,7 +31,7 @@ typedef struct {
     MyStruct *address_begin;
     unsigned long int index_begin;
     unsigned long int index_end;
-    pthread_mutex_t *mutex;
+    pthread_rwlock_t *rwlock;
 } MyStruct2;
 
 
@@ -130,8 +130,8 @@ int main() {
 
         // create another (number_of_threads-1) threads
         pthread_t threads[extra_number_of_threads];
-        // create a pthread mutex to control actions of reading and writing on the result_map
-        pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+        // create a pthread rwlock to control actions of reading and writing on the result_map
+        pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
 
         // int array to save return value of extra threads
         int thread_return_values[extra_number_of_threads];
@@ -150,7 +150,7 @@ int main() {
                     beginning_read_single,
                     index_begin,
                     index_end,
-                    &mutex1
+                    &rwlock
             };
             thread_return_values[i] = pthread_create(
                     threads + i,
@@ -178,8 +178,8 @@ int main() {
 
         // create another (number_of_threads-1) threads
         pthread_t threads2[extra_number_of_threads];
-        // recover mutex
-        mutex1 = PTHREAD_MUTEX_INITIALIZER;
+        // recover rwlock
+        rwlock = PTHREAD_RWLOCK_INITIALIZER;
         // int array to save return value of extra threads
         int thread_return_values2[extra_number_of_threads];
 
@@ -197,7 +197,7 @@ int main() {
                     beginning_write_single,
                     index_begin2,
                     index_end2,
-                    &mutex1
+                    &rwlock
             };
             thread_return_values2[i] = pthread_create(
                     threads2 + i,
@@ -246,7 +246,7 @@ void *thread_function(void *p) {
             pointer->address_begin,
             pointer->index_begin,
             pointer->index_end,
-            pointer->mutex
+            pointer->rwlock
     );
     __time_t count_end = time(nullptr);
     printf("%-50s%lds\n", "multi-threads counting costs", count_end - count_begin);

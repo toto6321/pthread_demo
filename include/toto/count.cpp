@@ -18,7 +18,7 @@ void count(map<string, int> *count_result,
            MyStruct *begin,
            unsigned long int index_start,
            unsigned long int index_end,
-           pthread_mutex_t *mutex1
+           pthread_rwlock_t *rwlock
 ) {
     string generate_key_of_count_map(int address, const string &name);
 
@@ -53,9 +53,10 @@ void count(map<string, int> *count_result,
 
         string key = generate_key_of_count_map(address, function_name);
         // When you are searching in the map of count_result, you have to lock it because other threads might be updating it.
-        // Definitely, it is the same with the case where you are updating it.
-        pthread_mutex_lock(mutex1);
+        pthread_rwlock_rdlock(rwlock);
         cursor = count_result->find(key);
+        // Definitely, it is not allowed to either read or write the map.
+        pthread_rwlock_wrlock(rwlock);
         if (cursor != count_result->end()) {
             // if the key/value pair exists, increase it by 1
             cursor->second++;
@@ -63,7 +64,7 @@ void count(map<string, int> *count_result,
             // if not exist, insert this new record
             count_result->insert(pair<string, int>(key, 1));
         }
-        pthread_mutex_unlock(mutex1);
+        pthread_rwlock_unlock(rwlock);
     }
 }
 
