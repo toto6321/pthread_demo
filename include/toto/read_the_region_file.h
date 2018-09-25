@@ -13,7 +13,7 @@ using namespace std;
 
 #ifndef HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
 #define HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
-typedef map<string, set<int>> function_id_map;
+typedef map<string, set<unsigned long int>> function_id_map;
 #endif //HOMEWORK1_TIANHUAN_TU_READ_THE_REGION_FILE_H
 
 

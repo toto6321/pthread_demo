@@ -17,7 +17,7 @@
 #include "read_the_region_file.h"
 
 const int FUNCTION_NAME_MAX_SIZE = 50;
-const int REGION_ROW_MAX_SIZE = 200;
+const int REGION_ROW_MAX_SIZE = 300;
 
 using namespace std;
 
@@ -43,7 +43,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
     char buffer[REGION_ROW_MAX_SIZE];
     char *buffer_string;
 
-    int id = -1;
+    unsigned long int id = 0;
     char type[10] = "", function_name[FUNCTION_NAME_MAX_SIZE] = "";
 
     input_stream = fopen(file_name, "r");
@@ -53,7 +53,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
     }
 
     while (nullptr != (buffer_string = fgets(buffer, BUFFER_SIZE, input_stream))) {
-        if (sscanf(buffer_string, "%d %s %s", &id, type, function_name) < 3) {
+        if (sscanf(buffer_string, "%ld %s %s", &id, type, function_name) < 3) {
             // there will be no exception even though sscanf cannot extract data as expected
             // and in that case the variables will remain what they are.
             // we have to deal with this special case
@@ -72,7 +72,7 @@ FunctionIdSet *read_the_region_file(char *file_name, unsigned long int *number) 
 
         (*number)++;
 
-//        printf("%-50s %d\n", function_name, id);
+//        printf("%-50s %ld\n", function_name, id);
     }
 
     // do not forget to close the scream
@@ -96,7 +96,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
     // variable to store properties of a FunctionIdSet instance
     string name;
     char n[FUNCTION_NAME_MAX_SIZE];
-    int id = 0;
+    unsigned long int id = 0;
 
     // loop to generate a (id->function_name) map
     while (index < length) {
@@ -114,7 +114,7 @@ void map_region(FunctionIdSet *beginning, unsigned long int length, map<int, str
             string_to_char_array(name, n);
             if (name == n) {
                 // it should never happen!
-                printf("%010d,%-50s already exists!\n", id, n);
+                printf("%ld,%-50s already exists!\n", id, n);
             } else {
                 // duplicate record, just skip and save time
                 continue;
@@ -141,12 +141,12 @@ void string_to_char_array(const string &s, char ch[]) {
  * @return a map of (function_name, set(id)) pairs
  */
 void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id_map *region_map) {
-    map<string, set<int>>::iterator it;
+    map<string, set<unsigned long int>>::iterator it;
     unsigned long int index = 0;
 
     // variable to store properties of a FunctionIdSet instance
     string name;
-    int id = 0;
+    unsigned long int id = 0;
 
 
     while (index < length) {
@@ -157,9 +157,9 @@ void mergeRegion(FunctionIdSet *beginning, unsigned long int length, function_id
         if (region_map->end() == it) {
             // this function has not been added into the map
             // and we are going to add it
-            set<int> id_set;
+            set<unsigned long int> id_set;
             id_set.insert(id);
-            region_map->insert(pair<string, set<int>>(name, id_set));
+            region_map->insert(pair<string, set<unsigned long int>>(name, id_set));
         } else {
             // the map has already had the function record
             // and we are going to update its value/ add this id in to the id set

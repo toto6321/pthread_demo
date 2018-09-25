@@ -25,7 +25,8 @@ void count(map<string, int> *count_result,
     map<int, string>::iterator it;
 
     // temp variables used during counting
-    int address, call_id;
+    int address;
+    unsigned long int call_id;
     string function_name;
     map<string, int>::iterator cursor;
 
@@ -41,7 +42,7 @@ void count(map<string, int> *count_result,
 
         if (it == region_map->end()) {
             // generally speaking, it won't happen
-            printf("call id of %d doesn't exist in the region file!\n", call_id);
+            printf("call id of %ld doesn't exist in the region file!\n", call_id);
             continue;
         } else {
             // the function name is found

@@ -26,7 +26,8 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
     char buffer[BUFFER_SIZE];
 
     // variables to pass data to tuple property
-    int operation_id = -1, address = -1, call_id = -1;
+    unsigned long int operation_id = 0, call_id = 0;
+    int address = -1;
     float read_timestamp;
 
     // char pointer to the address where the returned buffer of fgets() starts to be stored.
@@ -48,7 +49,7 @@ MyStruct *read_the_single_file(char *file_name, unsigned long int *number) {
 
     while (nullptr != (buffer_string = fgets(buffer, BUFFER_SIZE, input_scream))) {
         // extract data from the buffer_string
-        if (sscanf(buffer_string, "%d %f %x %d", &operation_id, &read_timestamp, &address, &call_id) < 4) {
+        if (sscanf(buffer_string, "%ld %f %x %ld", &operation_id, &read_timestamp, &address, &call_id) < 4) {
             // there will be no exception even though sscanf cannot extract data as expected
             // and in that case the variables will remain what they are.
             // we have to deal with this special case
